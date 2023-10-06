@@ -2,7 +2,8 @@
 $title = " Create New User";
 include "header.php";
 
-
+$errorMsg='';
+$successMsg='';
 
 if(!empty($_POST)){
 
@@ -106,12 +107,340 @@ if(!empty($_POST)){
              $this->isDefault=$isdefault;   
         }
 
+        public function haveAlreadyEnteredRole(){
+            global $conn;
+            $select_check="";
+            $checkStmt="";
+            if($this->userType=="Employee"){
+                $select_check1="SELECT * from permissions where userName like ? and userType like ? and department_id = ? and isdefault = ?";
+                $checkStmt = $conn->prepare($select_check1);
+                $checkStmt->bind_param('ssii',$this->userName,$this->userType,$this->department_id,$this->isDefault);
+            }
+            else{
+                $select_check2="SELECT * from permissions where userName like ? and userType like ? and isdefault = ?";
+                $checkStmt = $conn->prepare($select_check2);
+                $checkStmt->bind_param('ssi',$this->userName,$this->userType,$this->isDefault);
+            }
+            if($checkStmt->execute()){
+                $result= $checkStmt->get_result();
+              if($result->num_rows>0){
+                return true;
+              }
+            }
+            return false;
+        }
+        public function insert(){
+             global $conn;
+             global $date;
+            $insert_query1="INSERT INTO permissions(
+                userName,
+                userType,
+                createdBy,
+                createdDate,
+                isdefault,
+                is_lead_add,
+                is_lead_proceed,
+                is_itinerary_request,
+                is_itinerary_submit,
+                is_itinerary_upload,
+                is_itinerary_view,
+                is_itinerary_download,
+                is_itinerary_delete,
+                is_itinerary_upload1,
+                is_itinerary_save,
+                is_itinerary_confirm,
+                is_itinerary_publish,
+                is_itinerary_qc,
+                is_package_create,
+                is_package_edit,
+                is_package_download,
+                is_package_delete,
+                is_customer_view,
+                is_customer_download,
+                is_partner_view,
+                is_partner_edit,
+                is_partner_replace,
+                is_payment_view,
+                is_payment_edit,
+                is_credit_add,
+                is_credit_connect,
+                is_reimbursement_add,
+                is_reimbursement_view,
+                is_reimbursement_approve,
+                is_reimbursement_reject,
+                is_receipt_create,
+                is_receipt_view,
+                is_receipt_edit,
+                is_ledger_add,
+                is_ledger_view,
+                is_ledger_download,
+                is_voucher_view,
+                is_voucher_manage,
+                is_voucher_download,
+                is_payout_view,
+                is_payout_publish,
+                is_payout_download,
+                is_cih_view,
+                is_cih_download,
+                is_pl_view,
+                is_pl_download,
+                is_cust_support_view,
+                is_cust_support_download,
+                is_cust_support_review,
+                is_cust_support_privileged,
+                is_cust_support_voucher,
+                is_employee_view,
+                is_employee_edit,
+                is_leave_add,
+                is_leave_view,
+                is_leave_approve,
+                is_leave_reject,
+                is_payroll_view,
+                is_payroll_upload,
+                is_payroll_generate,
+                is_payroll_download,
+                is_team_view,
+                is_team_add,
+                is_team_delete,
+                is_supplier_create,
+                is_supplier_view,
+                is_supplier_disable,
+                is_supplier_upload,
+                is_escalation_view,
+                is_escalation_create,
+                is_library_view,
+                is_library_upload,
+                is_library_delete,
+                is_report_create,
+                is_report_view,
+                is_report_download,
+                is_market_add,
+                is_market_view,
+                is_download,
+                is_user_create,
+                is_user_invite,
+                is_user_view,
+                is_user_edit,
+                is_user_reset_password,
+                is_user_enable,
+                is_master_view,
+                is_master_add,
+                department_id
+            ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"; 
+
+
+            $createdBy=$_SESSION['lastName'];
+            $permissionStmt="";    
+            if($this->userType=="Employee"){
+              $permissionStmt = $conn->prepare($insert_query1);
+              $permissionStmt->bind_param('ssssiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+                    $this->userName,
+                    $this->userType,
+                    $createdBy,
+                    $date,
+                    $this->isDefault,
+                    $this->Lead_add,
+                    $this->Lead_procced,
+                    $this->Itineray_add,
+                    $this->Itineray_submit,
+                    $this->Itineray_upload_1,
+                    $this->Itineray_view,
+                    $this->Itineray_download,
+                    $this->Itineray_delete,
+                    $this->Itineray_upload_2,
+                    $this->Itineray_save,
+                    $this->Itineray_confirm,
+                    $this->Itineray_publish,
+                    $this->Itineray_QC,
+                    $this->Package_create,
+                    $this->Package_edit,
+                    $this->Package_download,
+                    $this->Package_delete,
+                    $this->Customer_view,
+                    $this->Customer_download,
+                    $this->Partner_view,
+                    $this->Partner_edit,
+                    $this->Partner_replace,
+                    $this->Payment_view,
+                    $this->Payment_edit,
+                    $this->Credit_add,
+                    $this->Credit_connect,
+                    $this->Reiumbersement_add,
+                    $this->Reiumbersement_view,
+                    $this->Reiumbersement_approve,
+                    $this->Reiumbersement_reject,
+                    $this->Receipt_create,
+                    $this->Receipt_view,
+                    $this->Receipt_edit,
+                    $this->Ledger_add,
+                    $this->Ledger_view,
+                    $this->Ledger_download,
+                    $this->Voucher_view,
+                    $this->Voucher_manage,
+                    $this->Voucher_download,
+                    $this->Payout_view,
+                    $this->Payout_publish,
+                    $this->Payout_download,
+                    $this->CIH_view,
+                    $this->CIH_download,
+                    $this->PL_view,
+                    $this->PL_download,
+                    $this->Support_view,
+                    $this->Support_download,
+                    $this->Support_review,
+                    $this->Support_privileged,
+                    $this->Support_voucher,
+                    $this->Employee_view,
+                    $this->Employee_edit,
+                    $this->Leaves_add,
+                    $this->Leaves_view,
+                    $this->Leaves_approve,
+                    $this->Leaves_reject,
+                    $this->PayRoll_view,
+                    $this->PayRoll_upload,
+                    $this->PayRoll_generate,
+                    $this->PayRoll_download,
+                    $this->Team_view,
+                    $this->Team_add,
+                    $this->Team_delete,
+                    $this->Supplier_create,
+                    $this->Supplier_view,
+                    $this->Supplier_disable,
+                    $this->Supplier_upload,
+                    $this->Escalation_view,
+                    $this->Escalation_create,
+                    $this->Library_view,
+                    $this->Library_upload,
+                    $this->Library_delete,
+                    $this->Report_create,
+                    $this->Report_view,
+                    $this->Report_download,
+                    $this->Marketing_add,
+                    $this->Marketing_view,
+                    $this->Marketing_download,
+                    $this->User_create,
+                    $this->User_invite,
+                    $this->User_view,
+                    $this->User_edit,
+                    $this->User_reset_password,
+                    $this->User_enable,
+                    $this->Master_view,
+                    $this->Master_add,
+                    $this->department_id
+                );  
+            }else{
+                $dept=null;
+                $permissionStmt = $conn->prepare($insert_query1);
+                $permissionStmt->bind_param('ssssiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+                    $this->userName,
+                    $this->userType,
+                    $createdBy,
+                    $date,
+                    $this->isDefault,
+                    $this->Lead_add,
+                    $this->Lead_procced,
+                    $this->Itineray_add,
+                    $this->Itineray_submit,
+                    $this->Itineray_upload_1,
+                    $this->Itineray_view,
+                    $this->Itineray_download,
+                    $this->Itineray_delete,
+                    $this->Itineray_upload_2,
+                    $this->Itineray_save,
+                    $this->Itineray_confirm,
+                    $this->Itineray_publish,
+                    $this->Itineray_QC,
+                    $this->Package_create,
+                    $this->Package_edit,
+                    $this->Package_download,
+                    $this->Package_delete,
+                    $this->Customer_view,
+                    $this->Customer_download,
+                    $this->Partner_view,
+                    $this->Partner_edit,
+                    $this->Partner_replace,
+                    $this->Payment_view,
+                    $this->Payment_edit,
+                    $this->Credit_add,
+                    $this->Credit_connect,
+                    $this->Reiumbersement_add,
+                    $this->Reiumbersement_view,
+                    $this->Reiumbersement_approve,
+                    $this->Reiumbersement_reject,
+                    $this->Receipt_create,
+                    $this->Receipt_view,
+                    $this->Receipt_edit,
+                    $this->Ledger_add,
+                    $this->Ledger_view,
+                    $this->Ledger_download,
+                    $this->Voucher_view,
+                    $this->Voucher_manage,
+                    $this->Voucher_download,
+                    $this->Payout_view,
+                    $this->Payout_publish,
+                    $this->Payout_download,
+                    $this->CIH_view,
+                    $this->CIH_download,
+                    $this->PL_view,
+                    $this->PL_download,
+                    $this->Support_view,
+                    $this->Support_download,
+                    $this->Support_review,
+                    $this->Support_privileged,
+                    $this->Support_voucher,
+                    $this->Employee_view,
+                    $this->Employee_edit,
+                    $this->Leaves_add,
+                    $this->Leaves_view,
+                    $this->Leaves_approve,
+                    $this->Leaves_reject,
+                    $this->PayRoll_view,
+                    $this->PayRoll_upload,
+                    $this->PayRoll_generate,
+                    $this->PayRoll_download,
+                    $this->Team_view,
+                    $this->Team_add,
+                    $this->Team_delete,
+                    $this->Supplier_create,
+                    $this->Supplier_view,
+                    $this->Supplier_disable,
+                    $this->Supplier_upload,
+                    $this->Escalation_view,
+                    $this->Escalation_create,
+                    $this->Library_view,
+                    $this->Library_upload,
+                    $this->Library_delete,
+                    $this->Report_create,
+                    $this->Report_view,
+                    $this->Report_download,
+                    $this->Marketing_add,
+                    $this->Marketing_view,
+                    $this->Marketing_download,
+                    $this->User_create,
+                    $this->User_invite,
+                    $this->User_view,
+                    $this->User_edit,
+                    $this->User_reset_password,
+                    $this->User_enable,
+                    $this->Master_view,
+                    $this->Master_add,
+                    $dept
+                );  
+            }
+
+            if($permissionStmt->execute()){
+                return true;
+            }
+            return false;
+        }
+
         public function validate(){
             if(isset($this->Post['userName']) && !empty($this->Post['userName'])){
                 if(isset($this->Post['userType']) && !empty($this->Post['userType'])){
                     if( ( $this->Post['userType']=="Employee" && isset($this->Post['department']) && !empty($this->Post['department']) ) || $this->Post['userType']=="Partner" ){
                         $this->userName=$this->Post['userName'];
                         $this->userType=$this->Post['userType'];
+                        $this->department_id=$this->Post['department'];
 
                         $this->Lead_add= isset($this->Post['lead_add']) ? 1 : 0;
                         $this->Lead_procced= isset($this->Post['lead_proceed']) ? 1 : 0;
@@ -200,7 +529,12 @@ if(!empty($_POST)){
                         $this->User_enable= isset($this->Post['user_enable']) ? 1 : 0;
                         $this->Master_view= isset($this->Post['master_view']) ? 1 : 0;
                         $this->Master_add= isset($this->Post['master_add']) ? 1 : 0;
-
+                        if(!$this->haveAlreadyEnteredRole()){
+                            return true;
+                        }
+                        else{
+                            return "Already the user exist with userName and userType";
+                        }
                     } 
                     else{
                         return "Enter valid department";
@@ -216,21 +550,21 @@ if(!empty($_POST)){
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
 
-print_r($_POST); 
-exit();
+ $roles= new Permission($_POST,1);
+ $valid_result=$roles->validate();
+ if(is_bool($valid_result)){
+    if($roles->insert()){
+      $successMsg="Permissions submitted";  
+    }
+    else{
+        $errorMsg="Somthing went worng, resubmit the form.";
+    }
+ }
+ else{
+    $errorMsg=$valid_result;
+ }
 
 }
 
@@ -265,6 +599,7 @@ table {
 
         <div class="col-12 card-header " >
             <h3 style="color:#043c70"> Create New User</h3>
+            <p class="<?php echo !empty($errorMsg) ? "text-danger": ( !empty($successMsg) ? "text-success" : '');  ?>"><?php echo !empty($errorMsg) ? $errorMsg: ( !empty($successMsg) ? $successMsg : ''); ?></p>
         </div>
 
 
@@ -301,9 +636,20 @@ table {
 
         <div class="col-lg-6 d-none" id="department-drop-down">
                     <label for="">Department</label>
+                    <?php 
+                        $select_department="SELECT department_id, departmentName from department;";
+                        $department_stmt= $conn->prepare($select_department);
+                        $department_stmt->execute();
+                        $result_dept=$department_stmt->get_result();
+                    ?>
                     <select name="department" class="form-select mb-2" id="department">
                         <option value="" selected disabled>select</option>
-                        <option>Human Resource</option>
+                        <?php
+                            while($row=$result_dept->fetch_row()){ ?>
+                                <option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option> 
+                         <?php   }
+                        ?>
+                        <!-- <option>Human Resource</option>
                         <option>Sales</option>
                         <option>Marketing</option>
                         <option>Operations-Indian Holidays</option>
@@ -317,7 +663,7 @@ table {
                         <option>Training</option>
                         <option>Admin</option>
                         <option>Customer Support</option>
-                        <option>Partner Support</option>
+                        <option>Partner Support</option> -->
                     </select>
                 </div>
             

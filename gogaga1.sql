@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 03, 2023 at 05:59 PM
+-- Generation Time: Oct 06, 2023 at 05:20 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -988,8 +988,17 @@ CREATE TABLE `permissions` (
   `is_itinerary_save` tinyint(1) DEFAULT NULL,
   `is_itinerary_confirm` tinyint(1) DEFAULT NULL,
   `is_itinerary_publish` tinyint(1) DEFAULT NULL,
-  `is_itinerary_qc` tinyint(1) DEFAULT NULL
+  `is_itinerary_qc` tinyint(1) DEFAULT NULL,
+  `createdBy` varchar(100) DEFAULT NULL,
+  `createdDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`permission_id`, `userName`, `userType`, `isdefault`, `is_lead_add`, `is_lead_proceed`, `is_itinerary_request`, `is_itinerary_submit`, `is_itinerary_upload`, `is_itinerary_view`, `is_itinerary_download`, `is_itinerary_delete`, `is_package_create`, `is_package_edit`, `is_package_download`, `is_package_delete`, `is_customer_view`, `is_customer_download`, `is_partner_view`, `is_partner_edit`, `is_partner_replace`, `is_payment_view`, `is_payment_edit`, `is_credit_add`, `is_credit_connect`, `is_reimbursement_add`, `is_reimbursement_view`, `is_reimbursement_approve`, `is_reimbursement_reject`, `is_receipt_create`, `is_receipt_view`, `is_receipt_edit`, `is_ledger_add`, `is_ledger_view`, `is_ledger_download`, `is_voucher_view`, `is_voucher_manage`, `is_voucher_download`, `is_payout_view`, `is_payout_publish`, `is_payout_download`, `is_cih_view`, `is_cih_download`, `is_pl_view`, `is_pl_download`, `is_cust_support_view`, `is_cust_support_download`, `is_cust_support_review`, `is_cust_support_privileged`, `is_cust_support_voucher`, `is_employee_view`, `is_employee_edit`, `is_leave_add`, `is_leave_view`, `is_leave_approve`, `is_leave_reject`, `is_payroll_view`, `is_payroll_upload`, `is_payroll_generate`, `is_payroll_download`, `is_team_view`, `is_team_add`, `is_team_delete`, `is_supplier_create`, `is_supplier_view`, `is_supplier_disable`, `is_supplier_upload`, `is_escalation_view`, `is_escalation_create`, `is_library_view`, `is_library_upload`, `is_library_delete`, `is_report_create`, `is_report_view`, `is_report_download`, `is_market_add`, `is_market_view`, `is_download`, `is_user_create`, `is_user_invite`, `is_user_view`, `is_user_edit`, `is_user_reset_password`, `is_user_enable`, `is_master_view`, `is_master_add`, `user_id`, `department_id`, `is_itinerary_upload1`, `is_itinerary_save`, `is_itinerary_confirm`, `is_itinerary_publish`, `is_itinerary_qc`, `createdBy`, `createdDate`) VALUES
+(6, 'SuperPartner', 'Partner', 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, 0, 0, 0, 0, 0, 'Abhinav', '2023-10-05');
 
 -- --------------------------------------------------------
 
@@ -1204,7 +1213,7 @@ ALTER TABLE `partnerdetails`
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `reference`

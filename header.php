@@ -1,6 +1,6 @@
 <?php
 ob_start();
-session_start();
+// session_start();
 error_reporting(E_ERROR | E_PARSE);
 include "config.php";
 $email = $_SESSION['email'];
