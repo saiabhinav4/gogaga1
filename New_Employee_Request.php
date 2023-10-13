@@ -9,6 +9,11 @@ require_once "utils/mail.php";
 <?php 
 $errorMsg='';
 $successMsg='';
+
+ if(!empty($_GET) && isset($_GET['msg']) && !empty($_GET['msg'])){
+    $successMsg='successfully updated details!!';
+ }
+
  if(!empty($_POST)){
     if(isset($_POST["employeeType"]) && !empty($_POST["employeeType"])){
         if(isset($_POST["employeeType"]) && !empty($_POST["employeeType"])){
@@ -16,6 +21,7 @@ $successMsg='';
                 $employeeType= $_POST['employeeType'];
                 $employeeName= $_POST["employeeName"];
                 $employeeEmail= $_POST["employeeEmail"];
+                $url=$hostname.'EmployeeRegistration.php';
                 $msg="<pre>Dear Mr. $employeeName,
 
 Greetings from Gogaga Holidays,
@@ -23,7 +29,7 @@ Greetings from Gogaga Holidays,
 We take this opportunity to Congratulate you for Joining with our company as a $employeeType, as per the joining process we are sharing you our online link below which allows you to access our Employee Form to complete the joining formalities.
                 
 Please click here : EMPLOYEE FORM  
-(https://docs.google.com/forms/d/e/1FAIpQLScgRqeUe4opoclSiYuwegZEoubU0esPzFe_qm4DFcbnUx6Tyg/formResponse )
+( $url )
                 
 For any assistance in filling the form please contact HR  @  +91 7670892848  hr@gogagaholidays.in of our Support Team.</pre>";
                 if(triggerMail($employeeEmail,'Employee Regrestation',$msg)){
@@ -148,23 +154,58 @@ For any assistance in filling the form please contact HR  @  +91 7670892848  hr@
 
     </div>
 
+    <?php 
+       $isAgent=0;
+       $isActive=0;
+       $select_EmployeeRequests="SELECT firstname,lastname,email,contactNumber,designation,dateOfRequest,user.user_id from user,employeedetails where user.user_id=employeedetails.user_id and code IS NULL and isAgent=? and isActive=?;";
+       $employeeRequest_Stmt= $conn->prepare($select_EmployeeRequests);
+       $employeeRequest_Stmt->bind_param('ii',$isAgent,$isActive);
+       if($employeeRequest_Stmt->execute()){
+          $result_employee= $employeeRequest_Stmt->get_result();   
+       } 
+
+    ?>
     <div id="datatable-buttons_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer card-body">
         <div class="row">
             <div class="col-sm-12">
                 <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100 dataTable no-footer dtr-inline" role="grid" aria-describedby="datatable-buttons_info" style="width: 100%;">
                     <thead>
                         <tr role="row">
-                            <th class="sorting_asc">Partner Type</th>
-                            <th class="sorting">Partner Name</th>
-                            <th class="sorting">Partner Location</th>
-                            <th class="sorting">Area Of Operation</th>
+                            <th class="sorting_asc">Employee Name</th>
+                            <th class="sorting">Employee Email</th>
+                            <th class="sorting">Employee Contact No</th>
+                            <th class="sorting">Designation</th>
                             <th class="sorting">Date Of Request</th>
                             <th class="sorting">Actions</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        <tr role="row">
+                    <?php
+                          if($result_employee->num_rows>0){ 
+                            while($row=$result_employee->fetch_row()){  ?> 
+                               <tr role="row">
+                                 <td><?php echo $row[0].' '.$row[1]; ?></td>
+                                 <td><?php echo $row[2]; ?></td>
+                                 <td><?php echo $row[3]; ?></td>
+                                 <td><?php echo $row[4]; ?></td>
+                                 <td><?php echo $row[5]; ?></td>
+                                 <td>
+                                    <a href="Profile_Employee_View.php?id=<?php echo $row[6]; ?>" class="btn btn-primary">View</a>
+                                    <a href="EmployeeEdit.php?id=<?php echo $row[6]; ?>" class="btn btn-success" >Edit</a>
+                                    <!-- <button onclick="editAction()" class="btn btn-success">Edit</button> -->
+                                    <a href="Employee_Permissions.php?id=<?php echo $row[6]; ?>" ><button class="btn btn-secondary"> Set Permission</button></a>
+                                </td>
+                              </tr>            
+                    <?php    } 
+                          }
+                          else{  ?>
+                            <tr>
+                                <td colspan="6" style="text-align: center;" >No Records Found</td>
+                            </tr>          
+                    <?php  }
+                        ?>
+                        <!-- <tr role="row">
                             <td>Supplier</td>
                             <td>ABC Inc.</td>
                             <td>New York, NY</td>
@@ -199,7 +240,7 @@ For any assistance in filling the form please contact HR  @  +91 7670892848  hr@
                                 <button onclick="editAction()" class="btn btn-success">Edit</button>
                                 <a href="Employee_Permissions.php"><button onclick="setPermissionAction()" class="btn btn-secondary">Set Permission</button></a>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>

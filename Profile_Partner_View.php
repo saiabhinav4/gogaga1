@@ -46,9 +46,9 @@ include 'utils/getPartnerInfo.php';
                                             </div>
                                             <div class="col-sm-auto order-1 order-sm-2">
                                                 <div class="d-flex align-items-start justify-content-end gap-2">
-                                                    <div>
+                                                    <!-- <div>
                                                         <button type="button" class="btn btn-success"><i class="me-1"></i> Edit</button>
-                                                    </div>
+                                                    </div> -->
                                                     <?php
                                                     // $user_type = $agent_data['user_type'];
                                                   //  if($user_type == 'Super Agent' || 'Agent'){
@@ -330,7 +330,7 @@ Amount Paid :</h5>
                                                             </div>
                                                             <div class="col-xl">
                                                                 <div class="text-muted">
-                                                                    <p class="mb-2"><br/>
+                                                                    <p class="mb-2"><?php echo (!empty($agent_data['payment_mode']))? "YES":"NO"; ?><br/>
                                                             </p>
                                                             
                                                                 </div>
@@ -345,7 +345,7 @@ Paid throgh :</h5>
                                                             </div>
                                                             <div class="col-xl">
                                                                 <div class="text-muted">
-                                                                    <p class="mb-2"><?php // echo $agent_data['payment_mode']; ?><br/>
+                                                                    <p class="mb-2"><?php echo (!empty($agent_data['payment_mode']))? $agent_data['payment_mode'] :"-"; ?><br/>
                                                             </p>
                                                             
                                                                 </div>
@@ -360,7 +360,7 @@ Chque No :</h5>
                                                             </div>
                                                             <div class="col-xl">
                                                                 <div class="text-muted">
-                                                                    <p class="mb-2"><?php //echo $agent_data['cheque_no']; ?><br/>
+                                                                    <p class="mb-2"><?php echo (!empty($agent_data['slip_number']))? $agent_data['slip_number'] :"-"; ?><br/>
                                                             </p>
                                                             
                                                                 </div>
@@ -375,7 +375,7 @@ Date :</h5>
                                                             </div>
                                                             <div class="col-xl">
                                                                 <div class="text-muted">
-                                                                    <p class="mb-2"><?php //echo $agent_data['dot']; ?><br/>
+                                                                    <p class="mb-2"><?php echo (!empty($agent_data['transaction_date']))? $agent_data['transaction_date'] :"-"; ?><br/>
                                                             </p>
                                                             
                                                                 </div>

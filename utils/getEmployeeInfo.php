@@ -5,11 +5,13 @@
 $user_id='';
 $agent_data='';
 $bank_data='';
-$reference_data='';
+$reference_data1='';
+$reference_data2='';
+$prev_employment_data='';
 if(isset($_GET['id']) && !empty($_GET['id'])){
     $user_id=$_GET['id'];
 
-    $patnerDetails_query="SELECT * from user,partnerdetails,districts,states where user.user_id=partnerdetails.user_id and partnerdetails.district_id=districts.district_id and districts.state_id=states.id and user.user_id=?;";
+    $patnerDetails_query="SELECT * from user,employeedetails where user.user_id=employeedetails.user_id and user.user_id=?;";
     $patnerDetailsStmt= $conn->prepare($patnerDetails_query);
     $patnerDetailsStmt->bind_param('i',$user_id);
     if($patnerDetailsStmt->execute()){
@@ -25,12 +27,22 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
         $bank_data= $result_bank->fetch_assoc();
     }
 
-    $reference_query="SELECT referenceName, referencePhoneNumber from user,reference where user.user_id= reference.user_id and user.user_id=?;";
+    $reference_query="SELECT reference_id, referenceName, referencePhoneNumber from user,reference where user.user_id= reference.user_id and user.user_id=?;";
     $referencStmt= $conn->prepare($reference_query);
     $referencStmt->bind_param('i',$user_id);
     if($referencStmt->execute()){
         $result_ref= $referencStmt->get_result();
-        $reference_data= $result_ref->fetch_assoc();
+        $reference_data1= $result_ref->fetch_assoc();
+        $reference_data2= $result_ref->fetch_assoc();
+
+    }
+
+    $prev_emp="SELECT * from previousemployment where employee_id=?";
+    $prev_empstmt= $conn->prepare($prev_emp);
+    $prev_empstmt->bind_param('i',$agent_data['employee_id']);
+    if($prev_empstmt->execute()){
+        $result_prev=$prev_empstmt->get_result();
+        $prev_employment_data=$result_prev->fetch_assoc();
     }
 
 }

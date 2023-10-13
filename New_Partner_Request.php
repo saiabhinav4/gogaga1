@@ -71,6 +71,13 @@ $successMsg='';
         $errorMsg='Must Select Partner Type';
     }
 }
+
+
+if(!empty($_GET) && isset($_GET['msg']) && !empty($_GET['msg'])){
+    $successMsg='successfully updated details!!';
+ }
+
+
 ?>
 
 <div class="card">
@@ -95,7 +102,7 @@ $successMsg='';
                         <div class="modal-body">
                             <form action="" method="POST">
                                 <div>
-                                    <label for="">Partner Type</label>
+                                    <label for="">Partner Type</label>  
                                     <select name="partnerType" class="form-select mb-2" id="">
                                        <option value="" selected disabled>select</option>
                                         <option value="Super Partner">Super Partner</option>
@@ -204,7 +211,7 @@ Copy Right 2018 Policy | Privacy Policy | All Rights Reserved.">Send Mail</butto
                                  <td><?php echo $row[4]; ?></td>
                                  <td>
                                     <a href="Profile_Partner_view.php?id=<?php echo $row[0]; ?>" class="btn btn-primary">View</a>
-                                    <button onclick="editAction()" class="btn btn-success">Edit</button>
+                                    <a href="PartnerEdit.php?id=<?php echo $row[0]; ?>" class="btn btn-success">Edit</a>
                                     <a href="Partner_Permissions.php?id=<?php echo $row[0]; ?>" ><button class="btn btn-secondary"> Set Permission</button></a>
                                 </td>
                               </tr>            
